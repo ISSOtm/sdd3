@@ -16,7 +16,7 @@ all: $(BINDIR)/tp3
 .PHONY: all
 
 
-dist: tp2.zip
+dist: tp3.zip
 .PHONY: dist
 
 
