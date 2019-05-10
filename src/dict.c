@@ -13,29 +13,20 @@ int insert_word(Tree_t ** tree, char const * word) {
     TreeNode_t ** search_ptr = tree; /* Pointer to the pointer to the next node */
     const char * read_ptr = word;
 
-    /* While we're not at the end of the string... */
-    while(*read_ptr != '\0' && status == 0) {
+    /* The search is split in three parts:
+     * 1. Look for nodes matching the string
+     * 2. Add missing nodes (if any)
+     * 3. Mark the last node as terminating
+     */
+
+    /* Look for matching nodes */
+    while(*search_ptr != NULL && tolower((*search_ptr)->value) < tolower(*read_ptr) && *read_ptr != '\0' && status == 0) {
         search_ptr = seek_child(search_ptr, *read_ptr);
-
-        if(*search_ptr == NULL || tolower((*search_ptr)->value) != tolower(*read_ptr)) {
-            /* We need to insert the node */
-            tmp = create_node();
-            if(tmp == NULL) {
-                status = -1;
-            } else {
-                tmp->value = tolower(*read_ptr);
-                tmp->sibling = *search_ptr;
-                *search_ptr = tmp;
-            }
-        }
-
-        /* If we're at the last node in the word, mark it as terminating */
-        if(*++read_ptr == '\0') {
-            (*search_ptr)->value = toupper((*search_ptr)->value);
-        }
-
-        search_ptr = &(*search_ptr)->child;
+        (*search_ptr)->value = &(*search_ptr)->child;
+        read_ptr++;
     }
+
+    if(search_ptr == NULL || *search_ptr)
 
     return status;
 }
