@@ -15,7 +15,7 @@ int insert_word(Tree_t ** tree, char const * word) {
 
     /* While we're not at the end of the string... */
     while(*read_ptr != '\0' && status == 0) {
-        search_ptr = seek_node(search_ptr, *read_ptr);
+        search_ptr = seek_child(search_ptr, *read_ptr);
 
         if(*search_ptr == NULL || tolower((*search_ptr)->value) != tolower(*read_ptr)) {
             /* We need to insert the node */

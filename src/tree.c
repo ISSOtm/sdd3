@@ -39,9 +39,11 @@ void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned
                 }
                 read_ptr = read_ptr->child;
                 depth++;
+
             } else if(read_ptr->sibling != NULL) {
                 /* If there is only a sibling, then go to them */
                 read_ptr = read_ptr->sibling;
+
             } else {
                 /* If this was a leaf, go back to previous intersection */
                 traversal_struct = pop(stack, NULL);
@@ -54,7 +56,7 @@ void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned
 }
 
 
-TreeNode_t ** seek_node(TreeNode_t ** root_node, NODE_TYPE value) {
+TreeNode_t ** seek_child(TreeNode_t ** root_node, NODE_TYPE value) {
     TreeNode_t ** search_ptr = root_node;
     while(*search_ptr != NULL && tolower((*search_ptr)->value) < tolower(value)) {
         search_ptr = &(*search_ptr)->sibling;
