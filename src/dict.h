@@ -6,15 +6,6 @@
 
 
 /**
- * Seeks a pointer to the first node whose value is greater than (== not strictly inferior to) the given value
- * May return a pointer to NULL, but **never** NULL
- * @param root_node The node to seek the children of
- * @param value The value to be seeked
- * @return A pointer to the seeked node
- */
-TreeNode_t ** seek_node(TreeNode_t ** root_node, NODE_TYPE value);
-
-/**
  * Inserts a word in a dictionary tree. If the word is already present, this function does nothing.
  * @param tree A pointer to the dictionary to insert the word into
  * @param word The word to insert

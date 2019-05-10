@@ -7,15 +7,6 @@
 #include "growing_array.h"
 
 
-TreeNode_t ** seek_node(TreeNode_t ** root_node, NODE_TYPE value) {
-    TreeNode_t ** search_ptr = root_node;
-    while(*search_ptr != NULL && tolower((*search_ptr)->value) < tolower(value)) {
-        search_ptr = &(*search_ptr)->sibling;
-    }
-
-    return search_ptr;
-}
-
 int insert_word(Tree_t ** tree, char const * word) {
     int status = 0;
     TreeNode_t * tmp;
@@ -65,9 +56,9 @@ void _list_words(NODE_TYPE value, unsigned depth) {
 
     set_growing_array_size(&string, (depth + 2) * sizeof(char));
     DATA_OF(string, char*)[depth  ] = tolower(value);
-    DATA_OF(string, char*)[depth+1] = '\0';
 
     if(isupper(value)) {
+        DATA_OF(string, char*)[depth+1] = '\0';
         puts(DATA_OF(string, char*));
     }
 }

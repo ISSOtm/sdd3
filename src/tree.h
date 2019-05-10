@@ -29,6 +29,16 @@ void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned
 
 
 /**
+ * Seeks a pointer to the first child node whose value is greater than (== not strictly inferior to) the given value
+ * May return a pointer to NULL, but **never** NULL
+ * @param root_node The node to seek the children of
+ * @param value The value to be seeked
+ * @return A pointer to the seeked node
+ */
+TreeNode_t ** seek_node(TreeNode_t ** root_node, NODE_TYPE value);
+
+
+/**
  * Prints a tree's contents in a fairly crude manner
  * @param tree The tree to print the contents of
  */

@@ -53,6 +53,17 @@ void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned
     }
 }
 
+
+TreeNode_t ** seek_node(TreeNode_t ** root_node, NODE_TYPE value) {
+    TreeNode_t ** search_ptr = root_node;
+    while(*search_ptr != NULL && tolower((*search_ptr)->value) < tolower(value)) {
+        search_ptr = &(*search_ptr)->sibling;
+    }
+
+    return search_ptr;
+}
+
+
 /* "Private" function, basically a lambda */
 void _print_tree(NODE_TYPE value, unsigned depth) {
     unsigned i;
