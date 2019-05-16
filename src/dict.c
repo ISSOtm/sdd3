@@ -54,7 +54,6 @@ int insert_word(Tree_t ** tree, char const * word) {
 
     /* Add missing nodes, if any */
     if(*read_ptr != '\0') {
-        /* The `calloc` causes all pointers to be set to NULL by default */
         for(i = 0; *read_ptr != '\0'; read_ptr++, i++) {
             new_node = create_node();
             if(i != 0) {
