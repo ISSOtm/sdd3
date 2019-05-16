@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <string.h>
 #include "dict.h"
 #include "tree.h"
 #include "growing_array.h"
@@ -90,18 +91,35 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 }
 
 
-void _list_words(NODE_TYPE value, unsigned depth) {
+void _list_words(NODE_TYPE value, unsigned depth, void * arg) {
     static GrowingArray_t string = NEW_GROWING_ARRAY;
+    unsigned prefix_length = 0;
+    if((char*)arg != NULL && *(char*)arg != '\0') {
+		prefix_length = strlen((char*)arg) - 1;
+		if(depth == 0) {
+			set_growing_array_size(&string, prefix_length + 1);
+			memcpy(DATA_OF(string, char*), (char*)arg, prefix_length * sizeof(NODE_TYPE));
+		}
+	}
 
-    set_growing_array_size(&string, (depth + 2) * sizeof(char));
-    DATA_OF(string, char*)[depth  ] = tolower(value);
+    set_growing_array_size(&string, (prefix_length + depth + 2) * sizeof(char));
+    DATA_OF(string, char*)[    prefix_length + depth  ] = tolower(value);
 
     if(isupper(value)) {
-        DATA_OF(string, char*)[depth+1] = '\0';
+        DATA_OF(string, char*)[prefix_length + depth+1] = '\0';
         puts(DATA_OF(string, char*));
     }
 }
 
 void list_words(Tree_t const * tree) {
-    depth_first_traversal(tree, _list_words);
+    depth_first_traversal(tree, _list_words, NULL);
+}
+
+void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
+	NODE_TYPE const * pattern_ptr = pattern;
+	Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
+	
+	if(*pattern_ptr == '\0') {
+		depth_first_traversal(*pattern_end, _list_words, pattern); 
+	}
 }

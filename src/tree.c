@@ -18,7 +18,7 @@ TreeNode_t * create_node() {
 }
 
 
-void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned)) {
+void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned, void *), void * const arg) {
     TreeNode_t const * read_ptr = tree;
     Stack_t * const stack = create_stack();
     unsigned depth = 0; /* Depth is a very useful parameter to call the function with */
@@ -28,7 +28,7 @@ void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned
         push(stack, traversal_struct); /* This will be popped at the end of reading the tree, meaning it's been read all over */
 
         while(read_ptr != NULL) {
-            func(read_ptr->value, depth);
+            func(read_ptr->value, depth, arg);
 
             if(read_ptr->child != NULL) {
                 /* If there are children, we'll need to iterate over them */
@@ -76,5 +76,5 @@ void _print_tree(NODE_TYPE value, unsigned depth) {
 
 /* Used both as an example of depth-first traversal, and as a quick&dirty way to check a tree's contents */
 void print_tree(Tree_t const * tree) {
-    depth_first_traversal(tree, _print_tree);
+    depth_first_traversal(tree, _print_tree, NULL);
 }

@@ -30,5 +30,7 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 
 void list_words(Tree_t const * tree);
 
+void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern);
+
 
 #endif /* DICT_H */

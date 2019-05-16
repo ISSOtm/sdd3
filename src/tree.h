@@ -25,7 +25,7 @@ typedef struct {
 TreeNode_t * create_node();
 
 
-void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned));
+void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned, void *), void * const arg);
 
 
 /**
