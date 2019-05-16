@@ -11,13 +11,14 @@ int main(int argc, char* argv[]) {
     };
     insert_words(&dictionary, words, sizeof(words) / sizeof(char *));
 
+    puts("Tous les mots :");
     list_words(dictionary);
 
-	puts("Préfixe 'quarte': ");
+	puts("\nPréfixe 'quarte': ");
 	list_words_prefixed(&dictionary, "quarte");
-	puts("Préfixe vide:");
+	puts("\nPréfixe vide:");
 	list_words_prefixed(&dictionary, "");
-    puts("Préfixe 'sdd' :");
+    puts("\nPréfixe 'sdd' :");
     list_words_prefixed(&dictionary, "sdd");
 
     destroy_tree(dictionary);
