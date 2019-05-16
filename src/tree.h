@@ -24,8 +24,10 @@ typedef struct {
  */
 TreeNode_t * create_node();
 
+void destroy_tree(Tree_t * tree);
 
-void depth_first_traversal(Tree_t const * tree, void (*func)(NODE_TYPE, unsigned, void *), void * const arg);
+
+void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, void *), void * const arg);
 
 
 /**

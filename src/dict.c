@@ -91,7 +91,7 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 }
 
 
-void _list_words(NODE_TYPE value, unsigned depth, void * arg) {
+void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
     static GrowingArray_t string = NEW_GROWING_ARRAY;
     unsigned prefix_length = 0;
     if((char*)arg != NULL) {
@@ -103,16 +103,16 @@ void _list_words(NODE_TYPE value, unsigned depth, void * arg) {
 	}
 
     set_growing_array_size(&string, (prefix_length + depth + 2) * sizeof(char));
-    DATA_OF(string, char*)[    prefix_length + depth  ] = tolower(value);
+    DATA_OF(string, char*)[    prefix_length + depth  ] = tolower(node->value);
 
-    if(isupper(value)) {
+    if(isupper(node->value)) {
         DATA_OF(string, char*)[prefix_length + depth+1] = '\0';
         puts(DATA_OF(string, char*));
     }
 }
 
 void list_words(Tree_t const * tree) {
-    depth_first_traversal(tree, _list_words, NULL);
+    depth_first_traversal((Tree_t*)tree, _list_words, NULL);
 }
 
 void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {

@@ -19,6 +19,8 @@ int main(int argc, char* argv[]) {
 	list_words_prefixed(&dictionary, "");
     puts("Préfixe 'sdd' :");
     list_words_prefixed(&dictionary, "sdd");
+
+    destroy_tree(dictionary);
 	
     (void)argc;
     (void)argv;
