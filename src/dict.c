@@ -94,8 +94,8 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 void _list_words(NODE_TYPE value, unsigned depth, void * arg) {
     static GrowingArray_t string = NEW_GROWING_ARRAY;
     unsigned prefix_length = 0;
-    if((char*)arg != NULL && *(char*)arg != '\0') {
-		prefix_length = strlen((char*)arg) - 1;
+    if((char*)arg != NULL) {
+		prefix_length = strlen((char*)arg);
 		if(depth == 0) {
 			set_growing_array_size(&string, prefix_length + 1);
 			memcpy(DATA_OF(string, char*), (char*)arg, prefix_length * sizeof(NODE_TYPE));
@@ -119,7 +119,28 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
 	NODE_TYPE const * pattern_ptr = pattern;
 	Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
 	
-	if(*pattern_ptr == '\0') {
-		depth_first_traversal(*pattern_end, _list_words, pattern); 
+    /*
+     * An empty prefix causes `find_node` to return the first tree's root,
+     * which is interpreted below as part of the prefix, ultimately leading to
+     * buggy results. What listing words with an empty prefix does is ambiguous,
+     * therefore we've decided to special-case it so it can be handled separately.
+     * (Some opinions are that an empty prefix should return all words, others think
+     * it should return none instead).
+     * Which of the two behaviors should be taken here was decided using a very
+     * scientific method essentially consisting of applying a rotation to a coin and
+     * stopping it at a certain point in time. I think that's known as a "coin flip".
+     * 
+     * Consider this a hack if you so desire.
+     */
+    if(*pattern == '\0') {
+        /* Empty prefix means "print all words" */
+        list_words(*root_node);
+    } else if(*pattern_ptr == '\0') {
+        /* This cannot show the prefix if it itself is a word in the dictionary */
+        /* To keep the code consistent, the prefix is special-cased here */
+        if(isupper((*pattern_end)->value)) {
+            puts(pattern);
+        }
+		depth_first_traversal((*pattern_end)->child, _list_words, pattern); 
 	}
 }
