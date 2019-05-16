@@ -3,10 +3,18 @@
 
 
 #include "tree.h"
+#include "growing_array.h"
+
+
+typedef struct {
+    GrowingArray_t array;
+    NODE_TYPE * prefix;
+} ListWordsArg_t;
 
 
 /**
  * Given a string of letters, tries to find the last node corresponding to that string of letters
+ * @param
  * @return A pointer to the last node matching the given path
  */
 TreeNode_t ** find_node(Tree_t ** tree, char const ** const path);

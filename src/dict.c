@@ -35,7 +35,7 @@ TreeNode_t ** find_node(Tree_t ** tree, char const ** const path) {
 int insert_word(Tree_t ** tree, char const * word) {
     int status = 0;
     TreeNode_t ** search_ptr; /* Pointer to the pointer to the next node */
-    TreeNode_t * new_nodes;
+    TreeNode_t * new_node;
     unsigned i;
     char const * read_ptr = word;
 
@@ -54,23 +54,20 @@ int insert_word(Tree_t ** tree, char const * word) {
 
     /* Add missing nodes, if any */
     if(*read_ptr != '\0') {
-        new_nodes = calloc(strlen(read_ptr), sizeof(TreeNode_t));
-        if(new_nodes != NULL) {
-            /* Insert the new child in the middle of its siblings (if any) */
-            new_nodes[0].sibling = *search_ptr;
-            /* The `calloc` causes all pointers to be set to NULL by default */
-            for(i = 0; *read_ptr != '\0'; read_ptr++, i++) {
+        /* The `calloc` causes all pointers to be set to NULL by default */
+        for(i = 0; *read_ptr != '\0'; read_ptr++, i++) {
+            new_node = create_node();
+            if(i != 0) {
                 /* Advance to next intended level, except on first step where it's already done */
-                if(i != 0) {
-                    search_ptr = &(*search_ptr)->child;
-                }
-                /* Set current node's letter */
-                new_nodes[i].value = tolower(*read_ptr);
-                /* Set parent node's child pointer */
-                *search_ptr = &new_nodes[i];
+                search_ptr = &(*search_ptr)->child;
+            } else {
+                /* Insert the new child in the middle of its siblings (if any) */
+                new_node->sibling = *search_ptr;
             }
-        } else {
-            status = -1;
+            /* Set current node's letter */
+            new_node->value = tolower(*read_ptr);
+            /* Set parent node's child pointer */
+            *search_ptr = new_node;
         }
     }
 
@@ -92,30 +89,36 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 
 
 static void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
-    static GrowingArray_t string = NEW_GROWING_ARRAY;
+    ListWordsArg_t * args = (ListWordsArg_t*)arg;
+    GrowingArray_t * string = &args->array;
+    char * prefix = args->prefix;
     unsigned prefix_length = 0;
-    if((char*)arg != NULL) {
-		prefix_length = strlen((char*)arg);
+
+    if(prefix != NULL) {
+		prefix_length = strlen(prefix);
 		if(depth == 0) {
-			set_growing_array_size(&string, prefix_length + 1);
-			memcpy(DATA_OF(string, char*), (char*)arg, prefix_length * sizeof(NODE_TYPE));
+			set_growing_array_size(string, prefix_length + 1);
+			memcpy(DATA_OF(*string, char*), prefix, prefix_length * sizeof(NODE_TYPE));
 		}
 	}
 
-    set_growing_array_size(&string, (prefix_length + depth + 2) * sizeof(char));
-    DATA_OF(string, char*)[    prefix_length + depth  ] = tolower(node->value);
+    set_growing_array_size(string, (prefix_length + depth + 2) * sizeof(char));
+    DATA_OF(*string, char*)[    prefix_length + depth  ] = tolower(node->value);
 
     if(isupper(node->value)) {
-        DATA_OF(string, char*)[prefix_length + depth+1] = '\0';
-        puts(DATA_OF(string, char*));
+        DATA_OF(*string, char*)[prefix_length + depth+1] = '\0';
+        puts(DATA_OF(*string, char*));
     }
 }
 
 void list_words(Tree_t const * tree) {
-    depth_first_traversal((Tree_t*)tree, _list_words, NULL);
+    ListWordsArg_t args = { .array = NEW_GROWING_ARRAY, .prefix = NULL };
+    depth_first_traversal((Tree_t*)tree, _list_words, &args);
+    DESTROY_GROWING_ARRAY(args.array);
 }
 
 void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
+    ListWordsArg_t args = { .array = NEW_GROWING_ARRAY, .prefix = pattern };
 	NODE_TYPE const * pattern_ptr = pattern;
 	Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
 	
@@ -141,6 +144,8 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
         if(isupper((*pattern_end)->value)) {
             puts(pattern);
         }
-		depth_first_traversal((*pattern_end)->child, _list_words, (void * const)pattern); 
+		depth_first_traversal((*pattern_end)->child, _list_words, &args); 
 	}
+
+    DESTROY_GROWING_ARRAY(args.array);
 }
