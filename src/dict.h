@@ -6,6 +6,12 @@
 
 
 /**
+ * Given a string of letters, tries to find the last node corresponding to that string of letters
+ * @return A pointer to the last node matching the given path
+ */
+TreeNode_t ** find_node(Tree_t ** tree, char const ** const path);
+
+/**
  * Inserts a word in a dictionary tree. If the word is already present, this function does nothing.
  * @param tree A pointer to the dictionary to insert the word into
  * @param word The word to insert
