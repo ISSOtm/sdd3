@@ -4,7 +4,7 @@
 
 /* For the FILE type */
 #include <stdio.h>
-/* For the Treenode_t * type */
+/* For the TreeTraversal_t * type */
 #include "tree.h"
 
 
@@ -20,7 +20,7 @@
  * TODO: have style guide clarify this?
 */
 typedef TreeTraversal_t STACK_DATA_TYPE;
-#define STACK_PRINTF_TYPE "%p"
+#define STACK_PRINTF_TYPE "Node=%p Depth=%u"
 
 typedef struct {
     unsigned nb_elems;
