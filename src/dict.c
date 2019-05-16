@@ -141,6 +141,6 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
         if(isupper((*pattern_end)->value)) {
             puts(pattern);
         }
-		depth_first_traversal((*pattern_end)->child, _list_words, pattern); 
+		depth_first_traversal((*pattern_end)->child, _list_words, (void * const)pattern); 
 	}
 }
