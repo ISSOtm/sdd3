@@ -91,7 +91,7 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 }
 
 
-void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
+static void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
     static GrowingArray_t string = NEW_GROWING_ARRAY;
     unsigned prefix_length = 0;
     if((char*)arg != NULL) {

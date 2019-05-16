@@ -17,7 +17,7 @@ TreeNode_t * create_node() {
     return node;
 }
 
-void _destroy_node(TreeNode_t * node, unsigned depth, void * arg) {
+static void _destroy_node(TreeNode_t * node, unsigned depth, void * arg) {
     (void)depth;
     (void)arg;
     free(node);
@@ -78,7 +78,7 @@ TreeNode_t ** seek_child(TreeNode_t ** root_node, NODE_TYPE value) {
 
 
 /* "Private" function, basically a lambda */
-void _print_tree(TreeNode_t * node, unsigned depth, void * arg) {
+static void _print_tree(TreeNode_t * node, unsigned depth, void * arg) {
     (void)arg;
     unsigned i;
     for(i = 0; i < depth; i++) putchar(' ');
