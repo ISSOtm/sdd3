@@ -30,6 +30,7 @@ void destroy_tree(Tree_t * tree) {
 
 void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, void *), void * const arg) {
     TreeNode_t * read_ptr = tree;
+    TreeNode_t * child, * sibling;
     Stack_t * const stack = create_stack();
     unsigned depth = 0; /* Depth is a very useful parameter to call the function with */
     TreeTraversal_t traversal_struct = { .node = NULL, .depth = 0 };
@@ -38,22 +39,25 @@ void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, v
         push(stack, traversal_struct); /* This will be popped at the end of reading the tree, meaning it's been read all over */
 
         while(read_ptr != NULL) {
+            /* The function might modify the node, but we mustn't be affected by it */
+            /* This is especially important for freeing */
+            child = read_ptr->child, sibling = read_ptr->sibling;
             func(read_ptr, depth, arg);
 
-            if(read_ptr->child != NULL) {
+            if(child != NULL) {
                 /* If there are children, we'll need to iterate over them */
-                if(read_ptr->sibling != NULL) {
+                if(sibling != NULL) {
                     /* If there also are siblings, we'll need to iterate over them as well */
-                    traversal_struct.node = read_ptr->sibling;
+                    traversal_struct.node = sibling;
                     traversal_struct.depth = depth;
                     push(stack, traversal_struct);
                 }
-                read_ptr = read_ptr->child;
+                read_ptr = child;
                 depth++;
 
-            } else if(read_ptr->sibling != NULL) {
+            } else if(sibling != NULL) {
                 /* If there is only a sibling, then go to them */
-                read_ptr = read_ptr->sibling;
+                read_ptr = sibling;
 
             } else {
                 /* If this was a leaf, go back to previous intersection */
