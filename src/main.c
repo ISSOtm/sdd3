@@ -13,8 +13,12 @@ int main(int argc, char* argv[]) {
 
     list_words(dictionary);
 
-	puts("prefix quart");
+	puts("Préfixe 'quarte': ");
 	list_words_prefixed(&dictionary, "quarte");
+	puts("Préfixe vide:");
+	list_words_prefixed(&dictionary, "");
+    puts("Préfixe 'sdd' :");
+    list_words_prefixed(&dictionary, "sdd");
 	
     (void)argc;
     (void)argv;
