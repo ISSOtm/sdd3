@@ -83,8 +83,9 @@ TreeNode_t ** seek_child(TreeNode_t ** root_node, NODE_TYPE value) {
 
 /* "Private" function, basically a lambda */
 static void _print_tree(TreeNode_t * node, unsigned depth, void * arg) {
-    (void)arg;
     unsigned i;
+    (void)arg;
+
     for(i = 0; i < depth; i++) putchar(' ');
     printf(NODE_PRINT_SPEC "\n", node->value);
 }
