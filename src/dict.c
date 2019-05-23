@@ -120,6 +120,7 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
     ListWordsArg_t args = { .array = NEW_GROWING_ARRAY, .prefix = pattern };
 	NODE_TYPE const * pattern_ptr = pattern;
 	Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
+    TreeNode_t * starting_node;
 	
     args.prefix = (NODE_TYPE*)pattern;
     
@@ -136,16 +137,20 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
      * 
      * Consider this a hack if you so desire.
      */
-    if(*pattern == '\0') {
-        /* Empty prefix means "print all words" */
-        list_words(*root_node);
-    } else if(*pattern_ptr == '\0') {
-        /* This cannot show the prefix if it itself is a word in the dictionary */
-        /* To keep the code consistent, the prefix is special-cased here */
-        if(isupper((*pattern_end)->value)) {
-            puts(pattern);
+    if(*pattern_ptr == '\0') {
+        if(*pattern == '\0') {
+            /* Empty prefix means "print all words" */
+            args.prefix = NULL;
+            starting_node = *root_node;
+        } else {
+            starting_node = (*pattern_end)->child;
+            /* This cannot show the prefix if it itself is a word in the dictionary */
+            /* To keep the code consistent, the prefix is special-cased here */
+            if(isupper((*pattern_end)->value)) {
+                puts(pattern);
+            }
         }
-		depth_first_traversal((*pattern_end)->child, _list_words, &args); 
+		depth_first_traversal(starting_node, _list_words, &args);
 	}
 
     DESTROY_GROWING_ARRAY(args.array);
