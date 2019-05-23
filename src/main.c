@@ -9,9 +9,16 @@ int main(int argc, char* argv[]) {
     char const * const words[] = {
         "quatre", "bien", "quarte", "quartiles", "bien", "bielle", "quartile", "quarte", "quartet", "quantifiable"
     };
+
+    puts("Préfixe vide :");
+    list_words_prefixed(&dictionary, "");
+    puts("\nPréfixe 'quarte' :");
+    list_words_prefixed(&dictionary, "quarte");
+
+    puts("\nInsertion mots");
     insert_words(&dictionary, words, sizeof(words) / sizeof(char *));
 
-    puts("Tous les mots :");
+    puts("\nTous les mots :");
     list_words(dictionary);
 
 	puts("\nPréfixe 'quarte': ");
