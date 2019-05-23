@@ -23,9 +23,7 @@ typedef struct {
  */
 int set_growing_array_size(GrowingArray_t * array, unsigned size);
 
-#define INCREASE_GROWING_ARRAY_SIZE(array, nmemb, type)   set_growing_array_size(array, (array)->len + (nmemb) * sizeof(type))
-
-#define DECREASE_SIZE(array, nmemb, type)   (array)->len -= (nmemb) * sizeof(type)
+#define SET_GROWING_ARRAY_SIZE(array, nmemb, type)   set_growing_array_size(array, (array)->len + (nmemb) * sizeof(type))
 
 #define DATA_OF(growing_array, type)    ((type)((growing_array).array))
 
