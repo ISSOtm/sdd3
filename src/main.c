@@ -20,16 +20,22 @@ int main(int argc, char* argv[]) {
 
     puts("\nTous les mots :");
     list_words(dictionary);
-
-	puts("\nPréfixe 'quarte': ");
-	list_words_prefixed(&dictionary, "quarte");
-	puts("\nPréfixe vide:");
+    
+	puts("\nliste des cas de list_words_prefixed :");
+	puts("\nPréfixe vide");
 	list_words_prefixed(&dictionary, "");
-    puts("\nPréfixe 'sdd' :");
-    list_words_prefixed(&dictionary, "sdd");
-
-    destroy_tree(dictionary);
 	
+	puts("\nPréfixe que");
+	list_words_prefixed(&dictionary, "que");
+	
+	puts("\nPréfixe qua");
+	list_words_prefixed(&dictionary, "qua");
+
+	puts("\nPréfixe quarte");
+	list_words_prefixed(&dictionary, "quarte");
+
+	destroy_tree(dictionary);
+
     (void)argc;
     (void)argv;
     return 0;
