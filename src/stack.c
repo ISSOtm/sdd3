@@ -65,7 +65,7 @@ void fprintf_stack(FILE * stream, Stack_t const * stack) {
     fprintf(stream, "Queue print, %u elems (from bottom)\n", stack->nb_elems);
 
     while(read_index < stack->nb_elems) {
-        fprintf(stream, "%d " STACK_PRINTF_TYPE "\n", read_index, stack->data[read_index].node, stack->data[read_index].depth);
+        fprintf(stream, "%d " STACK_PRINTF_TYPE "\n", read_index, (void*)stack->data[read_index].node, stack->data[read_index].depth);
         read_index++;
     }
 }

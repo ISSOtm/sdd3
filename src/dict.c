@@ -121,6 +121,8 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
 	NODE_TYPE const * pattern_ptr = pattern;
 	Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
 	
+    args.prefix = (NODE_TYPE*)pattern;
+    
     /*
      * An empty prefix causes `find_node` to return the first tree's root,
      * which is interpreted below as part of the prefix, ultimately leading to

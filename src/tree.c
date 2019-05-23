@@ -33,7 +33,7 @@ void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, v
     TreeNode_t * child, * sibling;
     Stack_t * const stack = create_stack();
     unsigned depth = 0; /* Depth is a very useful parameter to call the function with */
-    TreeTraversal_t traversal_struct = { .node = NULL, .depth = 0 };
+    TreeTraversal_t traversal_struct = { NULL, 0 };
 
     if(stack != NULL) {
         push(stack, traversal_struct); /* This will be popped at the end of reading the tree, meaning it's been read all over */

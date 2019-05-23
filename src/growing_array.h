@@ -8,7 +8,7 @@ typedef struct {
     unsigned size; /* Number of allocated items */
 } GrowingArray_t;
 
-#define NEW_GROWING_ARRAY   { .array = NULL, .len = 0, .size = 0 }
+#define NEW_GROWING_ARRAY   { NULL, 0, 0 }
 
 #define DESTROY_GROWING_ARRAY(grow_array) free((grow_array).array)
 

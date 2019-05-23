@@ -3,7 +3,7 @@ BINDIR  = bin
 OBJDIR  = obj
 SRCDIR  = src
 
-CFLAGS   = -Wall -Wextra -ansi -g
+CFLAGS   = -Wall -Wextra -ansi -g -pedantic
 LDFLAGS  =
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPSDIR)/$*.d.tmp
 DEPSDIR = deps
