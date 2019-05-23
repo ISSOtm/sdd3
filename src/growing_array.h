@@ -2,15 +2,18 @@
 #define GROWING_ARRAY_H
 
 
+/* Basically C++'s std::vector */
 typedef struct {
     void * array;
     unsigned len;  /* Number of used items */
     unsigned size; /* Number of allocated items */
 } GrowingArray_t;
 
+/* Feed this your initialization of a GrowingArray_t */
 #define NEW_GROWING_ARRAY   { NULL, 0, 0 }
 
-#define DESTROY_GROWING_ARRAY(grow_array) free((grow_array).array)
+/* Use this to ensure a GrowingArray gets destroyed correctly */
+#define DESTROY_GROWING_ARRAY(grow_array) free((grow_array).array); (grow_array).size = 0;
 
 
 /**

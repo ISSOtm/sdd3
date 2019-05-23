@@ -33,10 +33,10 @@ TreeNode_t ** find_node(Tree_t ** tree, char const ** const path) {
 }
 
 int insert_word(Tree_t ** tree, char const * word) {
-    int status = 0;
+    int status = 0; /* Whether the function succeeds or not */
     TreeNode_t ** search_ptr; /* Pointer to the pointer to the next node */
-    TreeNode_t * new_node;
-    unsigned i;
+    TreeNode_t * new_node; /* Pointer to the node we're about to create. (TODO: move this in the loop?) */
+    unsigned i; /* Used only to know if we're creating the first node */
     char const * read_ptr = word;
 
     /*
@@ -87,23 +87,30 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
 }
 
 
+/* Private function to the `list_words` function */
 static void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
-    ListWordsArg_t * args = (ListWordsArg_t*)arg;
-    GrowingArray_t * string = &args->array;
-    char * prefix = args->prefix;
-    unsigned prefix_length = 0;
+    ListWordsArg_t * args = (ListWordsArg_t*)arg; /* Shortcut to the args being passed, for brevity */
+    GrowingArray_t * string = &args->array; /* Output "std::vector" buffer */
+    char const * const prefix = args->prefix; /* The prefix to all the words we're about to print */
+    unsigned prefix_length = 0; /* Added to the depth to get the index into the output buffer */
 
+    /* If the prefix is not defined, consider it empty */
     if(prefix != NULL) {
-		prefix_length = strlen(prefix);
-		if(depth == 0) {
-			set_growing_array_size(string, prefix_length + 1);
-			memcpy(DATA_OF(*string, char*), prefix, prefix_length * sizeof(NODE_TYPE));
-		}
-	}
+        prefix_length = strlen(prefix);
+        /* This should only be ran once, ideally, but we'll avoid increasing the size of the arg struct */
+        if(depth == 0) {
+            /* Prepend the prefix to the output buffer */
+            set_growing_array_size(string, prefix_length + 1);
+            memcpy(DATA_OF(*string, char*), prefix, prefix_length * sizeof(NODE_TYPE));
+        }
+    }
 
+    /* Add current letter to the output */
     set_growing_array_size(string, (prefix_length + depth + 2) * sizeof(char));
     DATA_OF(*string, char*)[    prefix_length + depth  ] = tolower(node->value);
+    /* No need to terminate if we're not going to print */
 
+    /* If the letter is terminating, print the word that was constructed */
     if(isupper(node->value)) {
         DATA_OF(*string, char*)[prefix_length + depth+1] = '\0';
         puts(DATA_OF(*string, char*));
@@ -111,17 +118,17 @@ static void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
 }
 
 void list_words(Tree_t const * tree) {
-    ListWordsArg_t args = { .array = NEW_GROWING_ARRAY, .prefix = NULL };
+    ListWordsArg_t args = { NEW_GROWING_ARRAY, NULL };
     depth_first_traversal((Tree_t*)tree, _list_words, &args);
     DESTROY_GROWING_ARRAY(args.array);
 }
 
 void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
-    ListWordsArg_t args = { .array = NEW_GROWING_ARRAY, .prefix = pattern };
-	NODE_TYPE const * pattern_ptr = pattern;
-	Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
+    ListWordsArg_t args = { NEW_GROWING_ARRAY, NULL };
+    NODE_TYPE const * pattern_ptr = pattern;
+    Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
     TreeNode_t * starting_node;
-	
+
     args.prefix = (NODE_TYPE*)pattern;
     
     /*

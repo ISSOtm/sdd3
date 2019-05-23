@@ -14,7 +14,8 @@ typedef struct {
 
 /**
  * Given a string of letters, tries to find the last node corresponding to that string of letters
- * @param
+ * @param tree The tree to find the path in
+ * @param path The string to seek a path for
  * @return A pointer to the last node matching the given path
  */
 TreeNode_t ** find_node(Tree_t ** tree, char const ** const path);
