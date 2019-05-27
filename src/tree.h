@@ -20,13 +20,30 @@ typedef struct {
 
 /**
  * Allocates a new tree cell, filling its `child` and `sibling` pointers with NULL
+ * WARNING: the "value" field is NOT initialized!!
  * @return The allocated node, or NULL on error
  */
 TreeNode_t * create_node();
 
+/**
+ * Destroys a tree, freeing all its nodes
+ * @param tree The tree to be destroyed
+ */
 void destroy_tree(Tree_t * tree);
 
 
+/**
+ * Traverses a tree depth-first, executing a function each time a node is encountered
+ * Prefix traversal is applied, meaning the function is called as soon as each node is found
+ * @param tree The tree to run through
+ * @param func The function to call for each cell. Params are as follows:
+ *             1: The current node. Modifying the node is allowed, though modifying its `child` or `sibling` parameter
+ *                won't have any effect on the depth. This is required eg. for freeing nodes.
+ *             2: The depth at which the node is, 0 being the tree's root.
+ *             3: `arg` described below
+ * @param arg This argument will be passed unmodified to all calls to `func` as described above. Use this for storage
+ *            that should persist across calls to `func`.
+ */
 void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, void *), void * const arg);
 
 
