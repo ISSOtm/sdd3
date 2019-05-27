@@ -37,8 +37,17 @@ int insert_word(Tree_t ** tree, char const * word);
 int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_words);
 
 
+/**
+ * Lists all the words stored in a dictionary tree to stdout
+ * @param tree The tree to list the words of
+ */
 void list_words(Tree_t const * tree);
 
+/**
+ * Lists all the words beginning with a certain prefix in a dictionary tree to stdout
+ * @param root_node A pointer to the tree to list the words of
+ * @param pattern The prefix that all words must begin with. An empty prefix causes the function to behave as `list_words`.
+ */
 void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern);
 
 
