@@ -9,13 +9,13 @@
 #include "growing_array.h"
 
 
-TreeNode_t ** find_node(Tree_t ** tree, char const ** const path) {
-    TreeNode_t ** search_ptr = tree;
+TreeNode_t ** find_node(Tree_t const * const * tree, char const ** path) {
+    TreeNode_t const * const * search_ptr = tree;
 
     while(*search_ptr != NULL && **path != '\0' && tolower((*search_ptr)->value) <= tolower(**path)) {
         /* We have a pointer to a whole horizontal level */
         /* Seek the current letter in that level */
-        search_ptr = seek_child(search_ptr, **path);
+        search_ptr = (TreeNode_t const * const *)seek_child(search_ptr, **path);
         /* `search_ptr` points to either a matching node, or a non-matching one */
         /* If the node is a match, */
         if(*search_ptr != NULL && tolower((*search_ptr)->value) == tolower(**path)) {
@@ -24,12 +24,12 @@ TreeNode_t ** find_node(Tree_t ** tree, char const ** const path) {
             /* If we need to seek more nodes, */
             if(**path != '\0') {
                 /* Start searching that node's children */
-                search_ptr = &(*search_ptr)->child;
+                search_ptr = (TreeNode_t const * const *)&(*search_ptr)->child;
             }
         }
     }
 
-    return search_ptr;
+    return (TreeNode_t**)search_ptr;
 }
 
 int insert_word(Tree_t ** tree, char const * word) {
@@ -47,7 +47,7 @@ int insert_word(Tree_t ** tree, char const * word) {
      */
 
     /* Look for matching nodes */
-    search_ptr = find_node(tree, &read_ptr);
+    search_ptr = find_node((TreeNode_t const * const *)tree, &read_ptr);
     /* `search_ptr` points to either the first non-matching node or the last matching one,
      * and `read_ptr` has been advanced to the first non-matching char
      */
@@ -123,11 +123,11 @@ void list_words(Tree_t const * tree) {
     DESTROY_GROWING_ARRAY(args.array);
 }
 
-void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
+void list_words_prefixed(Tree_t const * root_node, NODE_TYPE const * const pattern) {
     ListWordsArg_t args = { NEW_GROWING_ARRAY, NULL };
     NODE_TYPE const * pattern_ptr = pattern;
-    Tree_t ** pattern_end = find_node(root_node, &pattern_ptr);
-    TreeNode_t * starting_node;
+    Tree_t const * const * pattern_end = (Tree_t const * const *)find_node(&root_node, &pattern_ptr);
+    TreeNode_t const * starting_node;
 
     args.prefix = (NODE_TYPE*)pattern;
     
@@ -148,7 +148,7 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
         if(*pattern == '\0') {
             /* Empty prefix means "print all words" */
             args.prefix = NULL;
-            starting_node = *root_node;
+            starting_node = root_node;
         } else {
             starting_node = (*pattern_end)->child;
             /* This cannot show the prefix if it itself is a word in the dictionary */
@@ -157,7 +157,7 @@ void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern) {
                 puts(pattern);
             }
         }
-		depth_first_traversal(starting_node, _list_words, &args);
+		depth_first_traversal((Tree_t *)starting_node, _list_words, &args);
 	}
 
     DESTROY_GROWING_ARRAY(args.array);

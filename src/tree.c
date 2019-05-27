@@ -78,13 +78,13 @@ void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, v
 }
 
 
-TreeNode_t ** seek_child(TreeNode_t ** root_node, NODE_TYPE value) {
-    TreeNode_t ** search_ptr = root_node;
+TreeNode_t ** seek_child(TreeNode_t const * const * root_node, NODE_TYPE value) {
+    TreeNode_t const * const * search_ptr = root_node;
     while(*search_ptr != NULL && tolower((*search_ptr)->value) < tolower(value)) {
-        search_ptr = &(*search_ptr)->sibling;
+        search_ptr = (TreeNode_t const * const *)&(*search_ptr)->sibling;
     }
 
-    return search_ptr;
+    return (TreeNode_t **)search_ptr;
 }
 
 

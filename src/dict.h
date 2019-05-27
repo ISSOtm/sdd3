@@ -18,7 +18,7 @@ typedef struct {
  * @param path The string to seek a path for
  * @return A pointer to the last node matching the given path
  */
-TreeNode_t ** find_node(Tree_t ** tree, char const ** const path);
+TreeNode_t ** find_node(Tree_t const * const * tree, char const * * path);
 
 /**
  * Inserts a word in a dictionary tree. If the word is already present, this function does nothing.
@@ -48,7 +48,7 @@ void list_words(Tree_t const * tree);
  * @param root_node A pointer to the tree to list the words of
  * @param pattern The prefix that all words must begin with. An empty prefix causes the function to behave as `list_words`.
  */
-void list_words_prefixed(Tree_t ** root_node, NODE_TYPE const * const pattern);
+void list_words_prefixed(Tree_t const * root_node, NODE_TYPE const * const pattern);
 
 
 #endif /* DICT_H */

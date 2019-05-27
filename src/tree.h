@@ -54,7 +54,7 @@ void depth_first_traversal(Tree_t * tree, void (*func)(TreeNode_t *, unsigned, v
  * @param value The value to be seeked
  * @return A pointer to the seeked node
  */
-TreeNode_t ** seek_child(TreeNode_t ** root_node, NODE_TYPE value);
+TreeNode_t ** seek_child(TreeNode_t const * const * root_node, NODE_TYPE value);
 
 
 /**

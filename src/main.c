@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
     };
 
     puts("Préfixe vide :");
-    list_words_prefixed(&dictionary, "");
+    list_words_prefixed(dictionary, "");
     puts("\nPréfixe 'quarte' :");
-    list_words_prefixed(&dictionary, "quarte");
+    list_words_prefixed(dictionary, "quarte");
 
     puts("\nInsertion mots");
     insert_words(&dictionary, words, sizeof(words) / sizeof(char *));
@@ -23,16 +23,16 @@ int main(int argc, char* argv[]) {
     
 	puts("\nliste des cas de list_words_prefixed :");
 	puts("\nPréfixe vide");
-	list_words_prefixed(&dictionary, "");
+	list_words_prefixed(dictionary, "");
 	
 	puts("\nPréfixe que");
-	list_words_prefixed(&dictionary, "que");
+	list_words_prefixed(dictionary, "que");
 	
 	puts("\nPréfixe qua");
-	list_words_prefixed(&dictionary, "qua");
+	list_words_prefixed(dictionary, "qua");
 
 	puts("\nPréfixe quarte");
-	list_words_prefixed(&dictionary, "quarte");
+	list_words_prefixed(dictionary, "quarte");
 
 	destroy_tree(dictionary);
 
