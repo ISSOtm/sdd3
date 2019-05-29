@@ -36,6 +36,15 @@ int insert_word(Tree_t ** tree, char const * word);
  */
 int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_words);
 
+/**
+ * Inserts words from a file into a dictionary tree.
+ * Each line may be empty, otherwise it must contain a single word.
+ * Whitespace is allowed both before and after.
+ * @param path The path to the file to read words from
+ * @return 0 if all went well, non-zero otherwise
+ */
+int insert_words_from_file(Tree_t ** tree, char const * path);
+
 
 /**
  * Lists all the words stored in a dictionary tree to stdout

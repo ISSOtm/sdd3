@@ -1,4 +1,6 @@
 
+#define _POSIX_C_SOURCE 200809L /* For getline() */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -86,6 +88,50 @@ int insert_words(Tree_t ** tree, char const * const * const words, unsigned nb_w
     return status;
 }
 
+int insert_words_from_file(Tree_t ** tree, char const * path) {
+    FILE * file = fopen(path, "rt");
+    int status = -1;
+
+    if(file != NULL) {
+        char * line_buf = NULL; /* The buffer `getline` will use */
+        size_t line_buf_size = 0; /* Same */
+        ssize_t nb_chars_read; /* Number of chars read, used to trap lines with a NUL char in the middle */
+        unsigned line_num = 0; /* Used for error reporting */
+
+        /* Attempt to read a line from the file */
+        while((nb_chars_read = getline(&line_buf, &line_buf_size, file)) != -1) {
+            static char const * delims = " \t\r\n";
+            char const * word_beginning; /* Pointer to the first char in the word */
+            size_t str_size; /* Size of the string, used to trap NUL chars in the middle of it */
+            line_num++;
+
+            /* Turn NUL chars in the middle of the string into spaces */
+            while((str_size = strlen(line_buf)) < (size_t)nb_chars_read) {
+                fprintf(stderr, "[WARNING] Line %u contains a NUL char in column %lu, treating as space\n", line_num, str_size + 1);
+                line_buf[str_size + 1] = ' ';
+            }
+            /* Use `strtok` to ignore padding characters */
+            word_beginning = strtok(line_buf, delims);
+
+            /* Check if there are other "tokens" so to speak, which would be invalid */
+            if(strtok(NULL, delims) != NULL) {
+                fprintf(stderr, "[WARNING] Line %u contains more than 1 token, ignoring remainder of line\n", line_num);
+            }
+            /* This happens eg. if the line is empty */
+            if(word_beginning != NULL) {
+                insert_word(tree, word_beginning);
+            }
+        }
+
+        /* FIXME: `getline` may return -1 if an error occurred, don't return 0 if that's the case */
+        status = 0;
+        free(line_buf);
+        fclose(file);
+    }
+
+    return status;
+}
+
 
 /* Private function to the `list_words` function */
 static void _list_words(TreeNode_t * node, unsigned depth, void * arg) {
@@ -130,7 +176,7 @@ void list_words_prefixed(Tree_t const * root_node, NODE_TYPE const * const patte
     TreeNode_t const * starting_node;
 
     args.prefix = (NODE_TYPE*)pattern;
-    
+
     /*
      * An empty prefix causes `find_node` to return the first tree's root,
      * which is interpreted below as part of the prefix, ultimately leading to
@@ -141,7 +187,7 @@ void list_words_prefixed(Tree_t const * root_node, NODE_TYPE const * const patte
      * Which of the two behaviors should be taken here was decided using a very
      * scientific method essentially consisting of applying a rotation to a coin and
      * stopping it at a certain point in time. I think that's known as a "coin flip".
-     * 
+     *
      * Consider this a hack if you so desire.
      */
     if(*pattern_ptr == '\0') {
